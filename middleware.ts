@@ -1,25 +1,16 @@
-import { authMiddleware, clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
-export default authMiddleware({
-    publicRoutes: [
-        '/',
-        '/events/:id',
-        '/api/webhooks/clerk',
-        '/api/webhooks/test',
-        '/api/webhooks/stripe',
-        '/api/uploadthing'
-    ],
-    ignoredRoutes: [
-        '/api/webhooks/stripe',
-        '/api/uploadthing'
-    ]
-});
+// Define a custom middleware handler
+export default clerkMiddleware();
 
+// Configuring matcher to apply middleware to specific routes
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    // Always run for API routes
-    '/(api|trpc)(.*)',
+    '/',
+    '/events/:id',
+    '/api/webhooks/clerk',
+    '/api/webhooks/test',
+    '/(api|trpc)(.*)', // API routes
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)', // Exclude static files
   ],
 };
