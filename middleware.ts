@@ -4,7 +4,7 @@ export default authMiddleware({
     publicRoutes: [
         '/',
         '/events/:id',
-        '/app/api/webhooks/clerk',
+        '/api/webhooks/clerk',
         '/api/webhooks/test',
         '/api/webhooks/stripe',
         '/api/uploadthing'
