@@ -1,18 +1,25 @@
-import { authMiddleware, clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-export default authMiddleware({
-    publicRoutes: [
-        '/',
-        '/events/:id',
-        '/api/webhooks/clerk',
-        '/api/webhooks/test',
-        '/api/webhooks/stripe',
-        '/api/uploadthing'
-    ],
-    ignoredRoutes: [
-        '/api/webhooks/stripe',
-        '/api/uploadthing'
-    ]
+// Define public routes
+const isPublicRoute = createRouteMatcher([
+  '/',
+  '/events/:id',
+  '/api/webhooks/clerk',
+  '/api/webhooks/test',
+  '/api/webhooks/stripe',
+  '/api/uploadthing',
+]);
+
+export default clerkMiddleware((auth, req) => {
+  if (isPublicRoute(req)) {
+    // Allow access to public routes without protection
+    return;
+  }
+
+  // Enforce authentication for non-public routes
+  if (!auth) {
+    throw new Error('Unauthorized: User is not authenticated');
+  }
 });
 
 export const config = {
